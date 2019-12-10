@@ -47,15 +47,11 @@ def initializeCSV(date, columns, timeframe):
 def generateDailyColumn(csv, overload):
     pass
 def generateWeeklyColumn(csv, overload, schedule, exercise):
-    activeDays = []
-    for i in range(0,len(schedule)):
-        if schedule[i] == True:
-            activeDays.append(i)
-
+    print(schedule)
     df = pd.read_csv(csv)
 
 
 
-generateWeeklyColumn('./Workout-data/test.csv', 2.5, [True, True, True, False, False, False, False], 'Squat')
+generateWeeklyColumn('./Workout-data/test.csv', 2.5, [0,1,3], 'Squat')
 #df = initializeCSV(dt.today(), exercises, 100)
 #df.to_csv('./Workout-data/test.csv', index=False)
