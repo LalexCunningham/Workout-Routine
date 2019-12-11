@@ -45,9 +45,9 @@ def initializeCSV(date, columns, timeframe):
 
     df = pd.DataFrame(getDates(date, timeframe, len(columns)), columns=cols)
     return df
-def generateDailyColumn(csv, overload):
+def generateAlternatingColumn(csv, overload):
     pass
-def generateWeeklyColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
+def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv(csv)
 
     # Add week number to column
@@ -81,6 +81,6 @@ def myRound(x, prec=2, base=2.5):
 
 #print(getDates(dt.today(), 10, 5))
 
-generateWeeklyColumn('./Workout-data/test.csv', [0,1,3], 'Bench Press', 40, 2.5, 3, 0.85)
+generateStandardColumn('./Workout-data/test.csv', [0,1,3], 'Bench Press', 40, 2.5, 3, 0.85)
 #df = initializeCSV(dt.today(), exercises, 100)
 #df.to_csv('./Workout-data/test.csv', index=False)
