@@ -44,11 +44,6 @@ def initializeCSV(date, columns, timeframe):
         cols.append(exercise)
 
     df = pd.DataFrame(getDates(date, timeframe, len(columns)), columns=cols)
-    return df
-def generateAlternatingColumn(csv, overload):
-    pass
-def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
-    df = pd.read_csv(csv)
 
     # Add week number to column
     # Create array
@@ -63,7 +58,13 @@ def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, d
         elif df.loc[i, 'weekday'] == 0:
             weekNum += 1
         weekNumberAry.append(weekNum)
-    df.insert(2, 'week', weekNumberAry)
+    df.insert(1, 'week', weekNumberAry)
+
+    return df
+def generateAlternatingColumn(csv, overload):
+    pass
+def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
+    df = pd.read_csv(csv)
 
     weight = startingWeight
     for i in range(0, len(df.index)):
@@ -74,13 +75,26 @@ def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, d
             else:
                 df.loc[i, [exercise]] = weight
                 weight += overload
-    print(df.head(50))
+    df.to_csv('./Workout-data/test.csv', index=False)
 
 def myRound(x, prec=2, base=2.5):
     return round(base * round(float(x)/base), prec)
 
 #print(getDates(dt.today(), 10, 5))
 
-generateStandardColumn('./Workout-data/test.csv', [0,1,3], 'Bench Press', 40, 2.5, 3, 0.85)
-#df = initializeCSV(dt.today(), exercises, 100)
-#df.to_csv('./Workout-data/test.csv', index=False)
+
+'''
+# Example 
+
+df = initializeCSV(dt.today(), exercises, 100)
+df.to_csv('./Workout-data/test.csv', index=False)
+
+generateStandardColumn('./Workout-data/test.csv', [0,3], 'Squat', 65, 2.5, 4, 0.85)
+generateStandardColumn('./Workout-data/test.csv', [1,4], 'Deadlift', 60, 5, 4, 0.85)
+generateStandardColumn('./Workout-data/test.csv', [0,1,3], 'Barbell Row', 35, 2.5, 4, 0.85)
+generateStandardColumn('./Workout-data/test.csv', [0,3], 'Bench Press', 40, 2.5, 4, 0.85)
+generateStandardColumn('./Workout-data/test.csv', [1,4], 'Overhead Press', 30, 2.5, 4, 0.85)
+
+df = pd.read_csv('./Workout-data/test.csv')
+print(df.head(50))
+'''
