@@ -30,15 +30,15 @@ def getDates(date, timeframe, columns):
     for day in datelist:
         datesColumn.append([day.strftime('%d.%m.%Y')])
 
-
     for date in datesColumn:
+        date.append(getWeekday(date[0]))
         for i in range(0,columns):
             date.append(None)
     return datesColumn
 
 def initializeCSV(date, columns, timeframe):
     # Create a list that will become the column names
-    cols = ['date']
+    cols = ['date', 'weekday']
     for exercise in columns:
         cols.append(exercise)
 
@@ -47,11 +47,12 @@ def initializeCSV(date, columns, timeframe):
 def generateDailyColumn(csv, overload):
     pass
 def generateWeeklyColumn(csv, overload, schedule, exercise):
-    print(schedule)
     df = pd.read_csv(csv)
+    print(df['date', exercise])
 
 
+#print(getDates(dt.today(), 10, 5))
 
-generateWeeklyColumn('./Workout-data/test.csv', 2.5, [0,1,3], 'Squat')
-#df = initializeCSV(dt.today(), exercises, 100)
-#df.to_csv('./Workout-data/test.csv', index=False)
+#generateWeeklyColumn('./Workout-data/test.csv', 2.5, [0,1,3], 'Squat')
+df = initializeCSV(dt.today(), exercises, 100)
+df.to_csv('./Workout-data/test.csv', index=False)
