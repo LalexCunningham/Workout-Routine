@@ -5,6 +5,7 @@ import pandas as pd
 
 exercises = ['Squat', 'Deadlift', 'Barbell Row', 'Bench Press', 'Overhead Press']
 
+
 def getWeekday(date):
 
     '''
@@ -46,13 +47,40 @@ def initializeCSV(date, columns, timeframe):
     return df
 def generateDailyColumn(csv, overload):
     pass
-def generateWeeklyColumn(csv, overload, schedule, exercise):
+def generateWeeklyColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv(csv)
-    print(df['date', exercise])
 
+    # Add week number to column
+    # Create array
+    weekNumberAry = []
+    weekNum = 1
+    firstWeek = True
+    for i in range(0, len(df.index)):
+        if df.loc[i, 'weekday'] == 0 and firstWeek == True:
+            pass
+        elif df.loc[i, 'weekday'] == 6:
+            firstWeek = False
+        elif df.loc[i, 'weekday'] == 0:
+            weekNum += 1
+        weekNumberAry.append(weekNum)
+    df.insert(2, 'week', weekNumberAry)
+
+    weight = startingWeight
+    for i in range(0, len(df.index)):
+        if df.loc[i, 'weekday'] in schedule:
+            deloadWeight = myRound(weight * deload_percent)
+            if df.loc[i, 'week'] % deload_freq == 0:
+                df.loc[i, [exercise]] = deloadWeight
+            else:
+                df.loc[i, [exercise]] = weight
+                weight += overload
+    print(df.head(50))
+
+def myRound(x, prec=2, base=2.5):
+    return round(base * round(float(x)/base), prec)
 
 #print(getDates(dt.today(), 10, 5))
 
-#generateWeeklyColumn('./Workout-data/test.csv', 2.5, [0,1,3], 'Squat')
-df = initializeCSV(dt.today(), exercises, 100)
-df.to_csv('./Workout-data/test.csv', index=False)
+generateWeeklyColumn('./Workout-data/test.csv', [0,1,3], 'Bench Press', 40, 2.5, 3, 0.85)
+#df = initializeCSV(dt.today(), exercises, 100)
+#df.to_csv('./Workout-data/test.csv', index=False)
