@@ -37,7 +37,7 @@ def getDates(date, timeframe, columns):
             date.append(None)
     return datesColumn
 
-def initializeCSV(date, columns, timeframe):
+def initializeCSV(name, date, columns, timeframe):
     # Create a list that will become the column names
     cols = ['date', 'weekday']
     for exercise in columns:
@@ -59,10 +59,10 @@ def initializeCSV(date, columns, timeframe):
             weekNum += 1
         weekNumberAry.append(weekNum)
     df.insert(1, 'week', weekNumberAry)
+    df.to_csv('./Workout-data/{}.csv'.format(name))
 
-    return df
-def generateAlternatingColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
-    df = pd.read_csv(csv)
+def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
+    df = pd.read_csv('./Workout-data/{}.csv'.format(name))
     weight = startingWeight
     for i in range(0, len(df.index)):
         if df.loc[i, 'week'] % 2 == 1:
@@ -84,8 +84,8 @@ def generateAlternatingColumn(csv,  schedule, exercise, startingWeight, overload
     df.to_csv('./Workout-data/test.csv', index=False)
 
 def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
-    df = pd.read_csv(csv)
-
+    df = pd.read_csv('./Workout-data/{}.csv'.format(csv))
+    print(df)
     weight = startingWeight
     for i in range(0, len(df.index)):
         if df.loc[i, 'weekday'] in schedule:
@@ -95,16 +95,11 @@ def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, d
             else:
                 df.loc[i, [exercise]] = weight
                 weight += overload
-    df.to_csv('./Workout-data/test.csv', index=False)
+    df.to_csv('./Workout-data/{}.csv'.format(csv), index=False)
 
 def myRound(x, prec=2, base=2.5):
     return round(base * round(float(x)/base), prec)
 
-#print(getDates(dt.today(), 10, 5))
-
-
-df = pd.read_csv('Workout-data/test.csv')
-print(df.head(50))
 
 '''
 # Example 
@@ -113,18 +108,18 @@ df = initializeCSV(dt.today(), exercises, 100)
 df.to_csv('./Workout-data/test.csv', index=False)
 
 # Generate a standard workout: (Every week is the same)
-generateStandardColumn('./Workout-data/test.csv', [0,3], 'Squat', 65, 2.5, 4, 0.85)
-generateStandardColumn('./Workout-data/test.csv', [1,4], 'Deadlift', 60, 5, 4, 0.85)
-generateStandardColumn('./Workout-data/test.csv', [0,1,3], 'Barbell Row', 35, 2.5, 4, 0.85)
-generateStandardColumn('./Workout-data/test.csv', [0,3], 'Bench Press', 40, 2.5, 4, 0.85)
-generateStandardColumn('./Workout-data/test.csv', [1,4], 'Overhead Press', 30, 2.5, 4, 0.85)
+generateStandardColumn('test', [0,3], 'Squat', 65, 2.5, 4, 0.85)
+generateStandardColumn('test', [1,4], 'Deadlift', 60, 5, 4, 0.85)
+generateStandardColumn('test', [0,1,3], 'Barbell Row', 35, 2.5, 4, 0.85)
+generateStandardColumn('test', [0,3], 'Bench Press', 40, 2.5, 4, 0.85)
+generateStandardColumn('test', [1,4], 'Overhead Press', 30, 2.5, 4, 0.85)
 
 # Generate an alternating workout: (Every second week is the same, a la Stronglifts 5x5)
-generateAlternatingColumn('./Workout-data/test.csv', [[0,2,4],[0,2,4]], 'Squat', 65, 2.5, 4, 0.85)
-generateAlternatingColumn('./Workout-data/test.csv', [[0,4],[2]], 'Deadlift', 60, 5, 4, 0.85)
-generateAlternatingColumn('./Workout-data/test.csv', [[0,4],[2]], 'Bench Press', 40, 2.5, 4, 0.85)
-generateAlternatingColumn('./Workout-data/test.csv', [[2],[0,4]], 'Overhead Press', 30, 2.5, 4, 0.85)
-generateAlternatingColumn('./Workout-data/test.csv', [[2],[0,4]], 'Barbell Row', 35, 2.5, 4, 0.85)
+generateAlternatingColumn('test', [[0,2,4],[0,2,4]], 'Squat', 65, 2.5, 4, 0.85)
+generateAlternatingColumn('test', [[0,4],[2]], 'Deadlift', 60, 5, 4, 0.85)
+generateAlternatingColumn('test', [[0,4],[2]], 'Bench Press', 40, 2.5, 4, 0.85)
+generateAlternatingColumn('test', [[2],[0,4]], 'Overhead Press', 30, 2.5, 4, 0.85)
+generateAlternatingColumn('test', [[2],[0,4]], 'Barbell Row', 35, 2.5, 4, 0.85)
 
 df = pd.read_csv('./Workout-data/test.csv')
 print(df.head(50))
