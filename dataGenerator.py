@@ -85,7 +85,6 @@ def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overloa
 
 def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv('./Workout-data/{}.csv'.format(csv))
-    print(df)
     weight = startingWeight
     for i in range(0, len(df.index)):
         if df.loc[i, 'weekday'] in schedule:
