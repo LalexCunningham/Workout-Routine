@@ -3,7 +3,7 @@ import dataGenerator
 
 weight = input('Please enter a weight\n')
 
-try:
-    startingWeight = float(weight)
-except ValueError:
-    print('Please enter a valid weight')
+exercises = ['squat', 'bench', 'dl']
+
+for i in range(0,len(exercises)):
+    print(i)

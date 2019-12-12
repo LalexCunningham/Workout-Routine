@@ -81,10 +81,10 @@ def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overloa
                 else:
                     df.loc[i, [exercise]] = weight
                     weight += overload
-    df.to_csv('./Workout-data/test.csv', index=False)
+    df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
 
-def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
-    df = pd.read_csv('./Workout-data/{}.csv'.format(csv))
+def generateStandardColumn(name,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
+    df = pd.read_csv('./Workout-data/{}.csv'.format(name))
     weight = startingWeight
     for i in range(0, len(df.index)):
         if df.loc[i, 'weekday'] in schedule:
@@ -94,7 +94,7 @@ def generateStandardColumn(csv,  schedule, exercise, startingWeight, overload, d
             else:
                 df.loc[i, [exercise]] = weight
                 weight += overload
-    df.to_csv('./Workout-data/{}.csv'.format(csv), index=False)
+    df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
 
 def myRound(x, prec=2, base=2.5):
     return round(base * round(float(x)/base), prec)
