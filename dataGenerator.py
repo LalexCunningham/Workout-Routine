@@ -59,7 +59,7 @@ def initializeCSV(name, date, columns, timeframe):
             weekNum += 1
         weekNumberAry.append(weekNum)
     df.insert(1, 'week', weekNumberAry)
-    df.to_csv('./Workout-data/{}.csv'.format(name))
+    df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
 
 def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv('./Workout-data/{}.csv'.format(name))

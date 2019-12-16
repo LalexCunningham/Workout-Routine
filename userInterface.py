@@ -6,6 +6,18 @@ If you want to view a workout, type view, followed by the workout name.
 If you want to edit a workout, type edit, followed by the workout name.
 '''
 
+def generateStronglifts():
+    print('Generating your stronglifts program for the next 180 days (6 months)...')
+    lifts = ['Squat', 'Bench Press', 'Barbell Row', 'Deadlift', 'Overhead Press']
+    dataGenerator.initializeCSV('Stronglifts', dt.today(), lifts, 180)
+
+    # Generate individual lifts and progressions
+    dataGenerator.generateAlternatingColumn('Stronglifts', [[0, 2, 4], [0, 2, 4]], 'Squat', 35, 2.5, 4, 0.9)
+    dataGenerator.generateAlternatingColumn('Stronglifts', [[0, 4], [2]], 'Bench Press', 20, 2.5, 4, 0.9)
+    dataGenerator.generateAlternatingColumn('Stronglifts', [[0, 4], [2]], 'Barbell Row', 30, 2.5, 4, 0.9)
+    dataGenerator.generateAlternatingColumn('Stronglifts', [[2], [0, 4]], 'Deadlift', 40, 5, 4, 0.9)
+    dataGenerator.generateAlternatingColumn('Stronglifts', [[2], [0, 4]], 'Overhead Press', 20, 2.5, 4, 0.9)
+
 def newWorkout(workoutName):
     print('Creating workout {}.\nYou should first enter what exercises you want to include in your workout. Type next when you are done.\n'.format(workoutName))
     exerciseLoop = True
@@ -185,4 +197,4 @@ def standardWorkout(exercises, workoutName):
         dataGenerator.generateStandardColumn(workoutName, daysInputArray[i], exercise, weight, overload, deload, deloadWeight)
         i += 1
 
-#newWorkout('Stronglifts')
+generateStronglifts()
