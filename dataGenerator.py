@@ -61,6 +61,8 @@ def initializeCSV(name, date, columns, timeframe):
     df.insert(1, 'week', weekNumberAry)
     df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
 
+
+
 def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv('./Workout-data/{}.csv'.format(name))
     weight = startingWeight
@@ -82,6 +84,7 @@ def generateAlternatingColumn(name,  schedule, exercise, startingWeight, overloa
                     df.loc[i, [exercise]] = weight
                     weight += overload
     df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
+    generateWorkoutAttributes(name, deload_freq, deload_percent)
 
 def generateStandardColumn(name,  schedule, exercise, startingWeight, overload, deload_freq, deload_percent):
     df = pd.read_csv('./Workout-data/{}.csv'.format(name))
@@ -95,9 +98,18 @@ def generateStandardColumn(name,  schedule, exercise, startingWeight, overload, 
                 df.loc[i, [exercise]] = weight
                 weight += overload
     df.to_csv('./Workout-data/{}.csv'.format(name), index=False)
+    generateWorkoutAttributes(name, deload_freq, deload_percent)
 
 def myRound(x, prec=2, base=2.5):
     return round(base * round(float(x)/base), prec)
+
+def editLift(workoutName, lift, weight):
+    df = pd.read_csv('./Workout-data/{}.csv'.format(workoutName))
+    today = dt.today().strftime('%d.%m.%Y')
+
+def generateWorkoutAttributes(workoutName, deloadFreq, deloadAmt):
+    df = pd.DataFrame([[deloadFreq, deloadAmt]],columns=['Deload Frequency','Deload Ammount'])
+    df.to_csv('./Workout-data/{}_attributes.csv'.format(workoutName), index=False)
 
 
 '''
