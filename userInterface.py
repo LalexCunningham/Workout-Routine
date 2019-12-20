@@ -1,5 +1,6 @@
 import dataGenerator
 from datetime import datetime as dt
+
 welcomeMessage = '''Welcome, this is an app to help manage and update you about your workouts.
 In order to initialize your workout, type initialize. You will have to answer a few questions.
 If you want to view a workout, type view, followed by the workout name.
@@ -197,4 +198,3 @@ def standardWorkout(exercises, workoutName):
         dataGenerator.generateStandardColumn(workoutName, daysInputArray[i], exercise, weight, overload, deload, deloadWeight)
         i += 1
 
-generateStronglifts()

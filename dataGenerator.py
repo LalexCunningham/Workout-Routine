@@ -2,7 +2,7 @@ from datetime import datetime as dt
 import datetime
 import re
 import pandas as pd
-
+import math
 exercises = ['Squat', 'Deadlift', 'Barbell Row', 'Bench Press', 'Overhead Press']
 
 
@@ -103,10 +103,27 @@ def generateStandardColumn(name,  schedule, exercise, startingWeight, overload, 
 def myRound(x, prec=2, base=2.5):
     return round(base * round(float(x)/base), prec)
 
-def editLift(workoutName, lift, weight):
+def editLift(workoutName, lift, weight, increase, date):
     df = pd.read_csv('./Workout-data/{}.csv'.format(workoutName))
-    today = dt.today().strftime('%d.%m.%Y')
+    df_attributes = pd.read_csv('./Workout-data/{}_attributes.csv'.format(workoutName))
 
+    print(df_attributes.loc[0,'Deload Frequency'])
+
+
+    today = date.strftime('%d.%m.%Y')
+    startEditing = False
+    for i in range(0, len(df.index)):
+        print(df.loc[i, ['date', 'week', 'weekday', lift]])
+        if df.loc[i, 'date'] == today:
+            startEditing = True
+        if startEditing:
+            if not math.isnan(df.loc[i, lift]):
+                if df.loc[i, 'week'] % df_attributes.loc[0,'Deload Frequency'] == 0:
+                    df.loc[i, lift] = weight * df_attributes.loc[0, 'Deload Ammount']
+                else:
+                    df.loc[i, lift] = weight
+                    weight = weight + increase
+    df.to_csv('./Workout-data/{}.csv'.format(workoutName), index=False)
 def generateWorkoutAttributes(workoutName, deloadFreq, deloadAmt):
     df = pd.DataFrame([[deloadFreq, deloadAmt]],columns=['Deload Frequency','Deload Ammount'])
     df.to_csv('./Workout-data/{}_attributes.csv'.format(workoutName), index=False)
