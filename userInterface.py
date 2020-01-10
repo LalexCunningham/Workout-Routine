@@ -1,11 +1,8 @@
 import dataGenerator
 from datetime import datetime as dt
 import pandas as pd
-welcomeMessage = '''Welcome, this is an app to help manage and update you about your workouts.
-In order to initialize your workout, type initialize. You will have to answer a few questions.
-If you want to view a workout, type view, followed by the workout name.
-If you want to edit a workout, type edit, followed by the workout name.
-'''
+
+
 def editLift(workoutName):
     df = pd.read_csv('./Workout-data/{}.csv'.format(workoutName))
     possibleLifts = list(df.columns.values)[3:]
@@ -222,4 +219,23 @@ def standardWorkout(exercises, workoutName):
         dataGenerator.generateStandardColumn(workoutName, daysInputArray[i], exercise, weight, overload, deload, deloadWeight)
         i += 1
 
-editLift('liam_test')
+def mainMenu():
+
+    welcomeMessage = \
+'''Welcome, this is an app to help manage and update you about your workouts.
+In order to initialize a new workout, type new. You will have to answer a few questions.
+If you want to view a workout, type view, followed by the workout name.
+If you want to edit a workout, type edit, followed by the workout name.
+'''
+
+    selection =  input(welcomeMessage + '\n')
+    if selection == 'new':
+        name = input('Please enter a name for your workout:\n')
+        newWorkout(name)
+    elif selection == 'edit':
+        # TODO: Print a list of workouts in directory
+        name = input('Which workout would you like to edit?')
+        editLift(name)
+    elif selection == 'view':
+        pass
+mainMenu()
