@@ -3,8 +3,11 @@ from datetime import datetime as dt
 import math
 from twilio.rest import Client
 
-def sendText(workout):
+def sendText():
     try:
+        active_workout = open('./Workout-data/active_workout', 'r')
+        workout = active_workout.readline()
+
         df = pd.read_csv('./Workout-data/{}.csv'.format(workout))
         date = dt.now().strftime('%d.%m.%Y')
 
@@ -26,8 +29,10 @@ def sendText(workout):
         if todaysLifts == '':
             print('No workout for today.')
         else:
+            token = open('twilio_info', 'r')
+
             accountSID = 'AC2847c6838a359005a0bc5b636221653d'
-            authToken = ''
+            authToken = token.readlines()[0]
             twilioCli = Client(accountSID, authToken)
             myTwiolioNumber = '+1 205 350 9126'
             myCellPhone = '+353834240688'
@@ -39,4 +44,5 @@ def sendText(workout):
     except FileNotFoundError:
         print('Workout doesnt exist')
 
-sendText('liam_test')
+
+sendText()
