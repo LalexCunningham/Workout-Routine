@@ -219,6 +219,18 @@ def standardWorkout(exercises, workoutName):
         dataGenerator.generateStandardColumn(workoutName, daysInputArray[i], exercise, weight, overload, deload, deloadWeight)
         i += 1
 
+def setActiveWorkout():
+    active_workout = open('./Workout-data/active_workout', 'w')
+    workouts = getWorkouts()
+    while True:
+        new_active_workout = input('Please enter which workout you want to make active.\nYour workouts: {}\n'.format(workouts))
+        if new_active_workout not in workouts:
+            print('Please enter one of your workouts.\n')
+        else:
+            break
+    active_workout.write(new_active_workout)
+    active_workout.close()
+
 def getWorkouts():
     workouts = []
     for filename in os.listdir('./Workout-data/'):
@@ -232,7 +244,8 @@ def mainMenu():
 '''Welcome, this is an app to help manage and update you about your workouts.
 In order to initialize a new workout, type new. You will have to answer a few questions.
 If you want to view a workout, type view.
-If you want to edit a workout, type edit.'''
+If you want to edit a workout, type edit.
+If you want to change your active workout, type change.'''
 
     selection =  input(welcomeMessage + '\n')
     if selection == 'new':
@@ -244,5 +257,7 @@ If you want to edit a workout, type edit.'''
         editLift(name)
     elif selection == 'view':
         print('Saved workouts: {}'.format(getWorkouts()))
+    elif selection == 'change':
+        setActiveWorkout()
 
 mainMenu()
