@@ -1,7 +1,7 @@
 import dataGenerator
 from datetime import datetime as dt
 import pandas as pd
-
+import os
 
 def editLift(workoutName):
     df = pd.read_csv('./Workout-data/{}.csv'.format(workoutName))
@@ -219,23 +219,30 @@ def standardWorkout(exercises, workoutName):
         dataGenerator.generateStandardColumn(workoutName, daysInputArray[i], exercise, weight, overload, deload, deloadWeight)
         i += 1
 
+def getWorkouts():
+    workouts = []
+    for filename in os.listdir('./Workout-data/'):
+        if filename.endswith('.csv'):
+            workouts.append(filename[0:-4])
+    return workouts
+
 def mainMenu():
 
     welcomeMessage = \
 '''Welcome, this is an app to help manage and update you about your workouts.
 In order to initialize a new workout, type new. You will have to answer a few questions.
-If you want to view a workout, type view, followed by the workout name.
-If you want to edit a workout, type edit, followed by the workout name.
-'''
+If you want to view a workout, type view.
+If you want to edit a workout, type edit.'''
 
     selection =  input(welcomeMessage + '\n')
     if selection == 'new':
         name = input('Please enter a name for your workout:\n')
         newWorkout(name)
     elif selection == 'edit':
-        # TODO: Print a list of workouts in directory
-        name = input('Which workout would you like to edit?')
+        print('Saved workouts: {}'.format(getWorkouts()))
+        name = input('Which workout would you like to edit?\n')
         editLift(name)
     elif selection == 'view':
-        pass
+        print('Saved workouts: {}'.format(getWorkouts()))
+
 mainMenu()
