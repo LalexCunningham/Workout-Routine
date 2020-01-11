@@ -4,45 +4,49 @@ import math
 from twilio.rest import Client
 
 def sendText():
-    try:
-        active_workout = open('./Workout-data/active_workout', 'r')
-        workout = active_workout.readline()
 
-        df = pd.read_csv('./Workout-data/{}.csv'.format(workout))
-        date = dt.now().strftime('%d.%m.%Y')
+    #try:
+    active_workout = open('./Workout-data/active_workout', 'r')
+    workout = active_workout.readline()
 
-        # Get columns/lifts
-        liftNames = list(df.columns.values)[3:]
+    if workout == 'none':
+        return
 
-        todaysLifts = ''
+    df = pd.read_csv('./Workout-data/{}.csv'.format(workout))
+    date = dt.now().strftime('%d.%m.%Y')
 
-        today = df[df['date'] == date]
+    # Get columns
+    liftNames = list(df.columns.values)[3:]
 
-        i = 0
-        for lift in today.iloc[0, 3:]:
-            if math.isnan(lift):
-                i += 1
-            else:
-                todaysLifts += ('{}: {}kg\n'.format(liftNames[i], lift))
-                i += 1
+    todaysLifts = ''
 
-        if todaysLifts == '':
-            print('No workout for today.')
+    today = df[df['date'] == date]
+
+    i = 0
+    for lift in today.iloc[0, 3:]:
+        if math.isnan(lift):
+            i += 1
         else:
-            token = open('twilio_info', 'r')
+            todaysLifts += ('{}: {}kg\n'.format(liftNames[i], lift))
+            i += 1
 
-            accountSID = 'AC2847c6838a359005a0bc5b636221653d'
-            authToken = token.readlines()[0]
-            twilioCli = Client(accountSID, authToken)
-            myTwiolioNumber = '+1 205 350 9126'
-            myCellPhone = '+353834240688'
+    if todaysLifts == '':
+        print('No workout for today.')
+    else:
+        token = open('twilio_info', 'r')
 
-            messageBody = '\n\nGood morning, this is your workout routine for today:\n\n{}'.format(todaysLifts)
-            message = twilioCli.messages.create(body=messageBody, from_=myTwiolioNumber, to=myCellPhone)
-            print('Message Sent.')
+        accountSID = 'AC2847c6838a359005a0bc5b636221653d'
+        authToken = token.readlines()[0]
+        twilioCli = Client(accountSID, authToken)
+        myTwiolioNumber = '+1 205 350 9126'
+        myCellPhone = '+353834240688'
 
-    except FileNotFoundError:
-        print('Workout doesnt exist')
+        messageBody = '\n\nGood morning, this is your workout routine for today:\n\n{}'.format(todaysLifts)
+        message = twilioCli.messages.create(body=messageBody, from_=myTwiolioNumber, to=myCellPhone)
+        print('Message Sent.')
+
+    #except FileNotFoundError:
+    #    print('Workout doesnt exist')
 
 
 sendText()
