@@ -2,6 +2,11 @@ import pandas as pd
 from datetime import datetime as dt
 import math
 from twilio.rest import Client
+import os
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 def sendText():
 
